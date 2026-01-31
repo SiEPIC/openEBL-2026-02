@@ -1,0 +1,127 @@
+name: Final Verification Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: read
+
+jobs:
+  final-verification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          if ! command -v gh >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y gh
+          fi
+
+      - name: Authenticate GitHub CLI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GITHUB_TOKEN" | gh auth login --with-token
+
+      - name: Wait for all required checks to finish and succeed
+        id: wait-checks
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # IMPORTANT: make sure these names match `gh pr checks` output exactly
+          PDF_CHECKS=$'PullRequest\nCheck PDF Report Submissions\nCase Sensitivity check'
+          GDS_CHECKS=$'PullRequest\nCase Sensitivity check\nRun Layout Verification\nSubmission Checks\nCheck GDS and OAS File Submissions'
+
+          MAX_RETRIES=10
+          SLEEP_SECONDS=30
+
+          # Combined set of known checks
+          ALL_REQUIRED=$(printf '%s\n' "$PDF_CHECKS" "$GDS_CHECKS" | sort -u)
+
+          for ((i=1;i<=MAX_RETRIES;i++)); do
+            echo "Fetching checks for PR #$PR_NUMBER (attempt $i/$MAX_RETRIES)..."
+
+            CHECKS=$(gh pr checks "$PR_NUMBER" --json name,status,state -q '.[] | "\(.name)|\(.status)|\(.state)"')
+
+            if [ -z "$CHECKS" ]; then
+              echo "No checks reported yet."
+            else
+              echo "Current checks:"
+              printf '%s\n' "$CHECKS"
+            fi
+
+            # Determine which of our known checks are present
+            PRESENT_CHECKS=""
+            while IFS= read -r req; do
+              [ -z "$req" ] && continue
+              if printf '%s\n' "$CHECKS" | cut -d'|' -f1 | grep -Fxq "$req"; then
+                PRESENT_CHECKS+=$'\n'"$req"
+              fi
+            done <<< "$ALL_REQUIRED"
+
+            PRESENT_CHECKS=$(printf '%s\n' "$PRESENT_CHECKS" | sort -u)
+
+            # Fail if no relevant checks present
+            if [ -z "$PRESENT_CHECKS" ]; then
+              echo "No relevant checks present for this PR. Failing final verification."
+              exit 1
+            fi
+
+            echo "Present required checks on this PR:"
+            printf '%s\n' "$PRESENT_CHECKS"
+
+            all_success=1
+
+            # For each present required check, evaluate status/state
+            while IFS= read -r req; do
+              [ -z "$req" ] && continue
+              echo "Evaluating required check: '$req'"
+
+              while IFS= read -r check; do
+                [ -z "$check" ] && continue
+                name=${check%%|*}
+                rest=${check#*|}
+                status=${rest%%|*}
+                state=${rest##*|}
+
+                if [ "$name" = "$req" ]; then
+                  status_upper=$(echo "$status" | tr '[:lower:]' '[:upper:]')
+                  state_upper=$(echo "$state" | tr '[:lower:]' '[:upper:]')
+
+                  if [ "$status_upper" = "COMPLETED" ]; then
+                    if [ "$state_upper" = "SUCCESS" ]; then
+                      echo "  -> OK"
+                    elif [ "$state_upper" = "FAILURE" ]; then
+                      echo "Required check '$req' failed."
+                      exit 1
+                    else
+                      echo "  -> Completed but not SUCCESS/FAILURE (state=$state). Waiting..."
+                      all_success=0
+                    fi
+                  else
+                    echo "  -> Not completed yet (status=$status). Waiting..."
+                    all_success=0
+                  fi
+                fi
+              done <<< "$CHECKS"
+            done <<< "$PRESENT_CHECKS"
+
+            if [ "$all_success" -eq 1 ]; then
+              echo "All present required checks passed."
+              exit 0
+            fi
+
+            echo "Waiting for present checks to complete... ($i/$MAX_RETRIES)"
+            sleep "$SLEEP_SECONDS"
+          done
+
+          echo "Timeout waiting for all required checks to complete."
+          exit 1
+
+      - name: Success message
+        if: success()
+        run: echo "Final verification check passed. Auto-merge can proceed."
