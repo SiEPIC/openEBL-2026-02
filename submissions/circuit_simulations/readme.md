@@ -1,1 +1,0 @@
-# Simulation results go in this folder.
