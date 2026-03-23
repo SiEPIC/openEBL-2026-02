@@ -79,11 +79,30 @@ The verification and merging is performed using GitHub actions. The repository i
 
 
 ## Measurement data
-Will be added here.
+[https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf](https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf)
 
 ## SEM images of the fabricated designs
 
-Will be added here.
+Scanning electron microscope images of some of the devices from this fabrication run were taken, and are available in the "SEMs" folder, and shown here:
+
+
+![SEM image – 1x2 splitter](./SEMs/CC_011.jpg)
+
+![SEM image – Add Drop Ring Resonator](./SEMs/CC_010.jpg)
+
+![SEM image – 2x3 splitter](./SEMs/CC_007.jpg)
+
+![SEM image – subwavelength grating waveguides](./SEMs/CC_024.jpg)
+
+![SEM image – Bragg grating](./SEMs/CC_035.jpg)
+
+![SEM image – Bragg grating contra directional coupler](./SEMs/CC_040.jpg)
+
+
+![SEM image – lithgraphy test structure](./SEMs/CC_027.jpg)
+
+![SEM image – lithgraphy test structure](./SEMs/CC_034.jpg)
+
 
 ## Merged Layout File
 
