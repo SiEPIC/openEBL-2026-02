@@ -79,7 +79,10 @@ The verification and merging is performed using GitHub actions. The repository i
 
 
 ## Measurement data
-[https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf](https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf)
+[Scylla Data Set](https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf)
+
+[Iris Data Set (beta)](https://qdot-nexus.phas.ubc.ca:25683/s/YrR5BxFNfd9jKoy)
+Iris is a new stage we have developed. The data set included should be the same as the data set for 1550TE measured on Scylla. Please report any major discrepancies in your report if you are particiaping in the edX course. Or submit an issue if you are an OpenEBL user. 
 
 ## SEM images of the fabricated designs
 
