@@ -71,22 +71,22 @@ The submission involves several steps. First, you need to create your design(s) 
 - You must not change the name of the cell, the contents, nor cell origins. Otherwise, the replacement will not work correctly.
 
 ## FYI – Automated GitHub Actions
-The verification and merging is performed using GitHub actions. The repository implements the following:
+The verification and merging are performed using GitHub actions. The repository implements the following:
 1) Running the Python files in the "submissions/KLayout Python" folder, to generate the designs
-2) Performing Manufacturing DRC verification on the designs in the "submissions" folder, and outputing the errors as an Artifact
-3) Performing Functional verification on the designs in the "submissions" folder, and outputing the errors as an Artifact
-4) Merging the designs from the "submissions" folder, and outputing merged layout as an Artifact in the main repository
+2) Performing Manufacturing DRC verification on the designs in the "submissions" folder, and outputting the errors as an Artifact
+3) Performing Functional verification on the designs in the "submissions" folder, and outputting the errors as an Artifact
+4) Merging the designs from the "submissions" folder, and outputting the merged layout as an Artifact in the main repository
 
 
 ## Measurement data
 [Scylla Data Set](https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf)
 
 [Iris Data Set (beta)](https://qdot-nexus.phas.ubc.ca:25683/s/YrR5BxFNfd9jKoy)
-Iris is a new stage we have developed. The data set included should be the same as the data set for 1550TE measured on Scylla. Please report any major discrepancies in your report if you are particiaping in the edX course. Or submit an issue if you are an OpenEBL user. 
+Iris is a new stage we have developed. The data set included should be the same as the data set for 1550TE measured on Scylla. Please report any major discrepancies in your report if you are participating in the edX course. Or submit an issue if you are an OpenEBL user. 
 
 ## SEM images of the fabricated designs
 
-Scanning electron microscope images of some of the devices from this fabrication run were taken, and are available in the "SEMs" folder, and shown here:
+Scanning electron microscope images of some of the devices from this fabrication run were taken and are available in the "SEMs" folder and shown here:
 
 
 ![SEM image – 1x2 splitter](./SEMs/CC_011.jpg)
