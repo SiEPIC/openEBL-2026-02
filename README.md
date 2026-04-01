@@ -3,7 +3,7 @@
 
 - The Silicon Electronic Photonics Integrated Circuits (SiEPIC) fabrication program, <a href="https://siepic.ca/fabrication/">SiEPICfab</a>, presents the open electron beam lithography (EBL) fabrication process, where former and current students of <a href="https://siepic.ca/education/">SiEPIC</a> workshops and courses can submit their design for manufacturing and testing.
 - More details about <a href="https://siepic.ca/openEBL/">openEBL</a>.
-- **Submission deadline: February 14, 2026.**
+- **Submission deadline: 07:00 UTC February 14, 2026.**
 - The previous submission was in [October 2025](https://github.com/SiEPIC/openEBL-2025-10). You can look at previous designs for inspiration.
 
 # Fabrication process: Passive Silicon
@@ -71,19 +71,41 @@ The submission involves several steps. First, you need to create your design(s) 
 - You must not change the name of the cell, the contents, nor cell origins. Otherwise, the replacement will not work correctly.
 
 ## FYI – Automated GitHub Actions
-The verification and merging is performed using GitHub actions. The repository implements the following:
+The verification and merging are performed using GitHub actions. The repository implements the following:
 1) Running the Python files in the "submissions/KLayout Python" folder, to generate the designs
-2) Performing Manufacturing DRC verification on the designs in the "submissions" folder, and outputing the errors as an Artifact
-3) Performing Functional verification on the designs in the "submissions" folder, and outputing the errors as an Artifact
-4) Merging the designs from the "submissions" folder, and outputing merged layout as an Artifact in the main repository
+2) Performing Manufacturing DRC verification on the designs in the "submissions" folder, and outputting the errors as an Artifact
+3) Performing Functional verification on the designs in the "submissions" folder, and outputting the errors as an Artifact
+4) Merging the designs from the "submissions" folder, and outputting the merged layout as an Artifact in the main repository
 
 
 ## Measurement data
-Will be added here.
+[Scylla Data Set](https://qdot-nexus.phas.ubc.ca:25683/s/rEr5cHnpPdaYkRf)
+
+[Iris Data Set (beta)](https://qdot-nexus.phas.ubc.ca:25683/s/YrR5BxFNfd9jKoy)
+Iris is a new stage we have developed. The data set included should be the same as the data set for 1550TE measured on Scylla. Please report any major discrepancies in your report if you are participating in the edX course. Or submit an issue if you are an OpenEBL user. 
 
 ## SEM images of the fabricated designs
 
-Will be added here.
+Scanning electron microscope images of some of the devices from this fabrication run were taken and are available in the "SEMs" folder and shown here:
+
+
+![SEM image – 1x2 splitter](./SEMs/CC_011.jpg)
+
+![SEM image – Add Drop Ring Resonator](./SEMs/CC_010.jpg)
+
+![SEM image – 2x3 splitter](./SEMs/CC_007.jpg)
+
+![SEM image – subwavelength grating waveguides](./SEMs/CC_024.jpg)
+
+![SEM image – Bragg grating](./SEMs/CC_035.jpg)
+
+![SEM image – Bragg grating contra directional coupler](./SEMs/CC_040.jpg)
+
+
+![SEM image – lithgraphy test structure](./SEMs/CC_027.jpg)
+
+![SEM image – lithgraphy test structure](./SEMs/CC_034.jpg)
+
 
 ## Merged Layout File
 
@@ -91,5 +113,5 @@ Will be added here.
 
 Click on the following link to download the EBeam.oas merged layout file:
 <!-- start-link -->
-https://github.com/SiEPIC/openEBL-2026-02/actions/runs/18439052154/artifacts/4246909980
+https://github.com/SiEPIC/openEBL-2026-02/actions/runs/22739366138/artifacts/5788200650
 <!-- end-link -->

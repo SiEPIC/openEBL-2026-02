@@ -1,0 +1,80 @@
+name: Check PDF Report Submissions
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**.pdf'
+      - '**.PDF'
+
+jobs:
+  check_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Get list of changed files
+        id: changed_files
+        run: |
+          echo "Fetching changed files..."
+          FILES=$(git diff --name-only --diff-filter=ACM origin/${{ github.base_ref }}...HEAD)
+          
+          if [[ -z "$FILES" ]]; then
+            echo "No changed files detected."
+            exit 0  # Exits early if no files were changed
+          fi
+          
+          echo "Files detected:"
+          echo "$FILES"
+
+          # Store it properly in environment variable
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> $GITHUB_ENV
+
+      - name: Debug changed files
+        run: |
+          echo "Changed files:"
+          echo "${{ env.files }}"
+
+      - name: Debug File Paths
+        run: |
+          mapfile -t file_array <<< "${{ env.files }}"
+          for file in "${file_array[@]}"; do
+            echo "Checking file: '$file'"
+          done
+        shell: bash
+        
+      - name: Check PDF file locations and names
+        run: |
+          mapfile -t file_array <<< "${{ env.files }}"
+      
+          for file in "${file_array[@]}"; do
+            trimmed_file=$(echo "$file" | tr -d '[:space:]') # Trim spaces/newlines
+            
+            if [[ "$trimmed_file" == *.pdf || "$trimmed_file" == *.PDF ]]; then
+              if [[ "$trimmed_file" != reports/* ]]; then
+                echo "Error: PDF '$trimmed_file' is not in the 'reports' folder."
+                exit 1
+              fi
+              if [[ "$trimmed_file" == *" "* ]]; then
+                echo "Error: File '$trimmed_file' contains spaces in the filename."
+                exit 1
+              fi
+            fi
+          done
+        shell: bash
+
+      - name: Success message
+        if: success()
+        run: echo "All PDF files are correctly placed in the reports folder and contain no spaces in their filenames."
+
